@@ -59,7 +59,7 @@ class LiteralTest extends TestCase
      * @param        Literal $route
      * @param        string  $path
      * @param        integer $offset
-     * @param        boolean $shouldMatch
+     * @param        bool $shouldMatch
      */
     public function testMatching(Literal $route, $path, $offset, $shouldMatch)
     {
@@ -83,7 +83,7 @@ class LiteralTest extends TestCase
      * @param        Literal $route
      * @param        string  $path
      * @param        integer $offset
-     * @param        boolean $shouldMatch
+     * @param        bool $shouldMatch
      */
     public function testAssembling(Literal $route, $path, $offset, $shouldMatch)
     {
@@ -129,5 +129,15 @@ class LiteralTest extends TestCase
                 'route' => '/foo'
             )
         );
+    }
+
+    /**
+     * @group ZF2-436
+     */
+    public function testEmptyLiteral()
+    {
+        $request = new Request();
+        $route = new Literal('');
+        $this->assertNull($route->match($request, 0));
     }
 }

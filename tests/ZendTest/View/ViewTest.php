@@ -22,6 +22,7 @@ use Zend\View\Renderer;
 use Zend\View\Resolver;
 use Zend\View\Variables as ViewVariables;
 use Zend\View\View;
+use Zend\View\ViewEvent;
 
 class ViewTest extends TestCase
 {
@@ -289,5 +290,48 @@ class ViewTest extends TestCase
         ));
 
         $this->assertEquals($expected, $result->content);
+    }
+
+    public function testCanTriggerPostRendererEvent()
+    {
+        $this->attachTestStrategies();
+        $test = (object) array('flag' => false);
+        $this->view->getEventManager()->attach('renderer.post', function ($e) use ($test) {
+            $test->flag = true;
+        });
+        $variables = array(
+            'foo' => 'bar',
+            'bar' => 'baz',
+        );
+        $this->model->setVariables($variables);
+        $this->view->render($this->model);
+        $this->assertTrue($test->flag);
+    }
+
+    /**
+     * Test the view model can be swapped out
+     *
+     * @see https://github.com/zendframework/zf2/pull/4164
+     */
+    public function testModelFromEventIsUsedByRenderer()
+    {
+        $renderer = $this->getMock('Zend\View\Renderer\PhpRenderer', array('render'));
+
+        $model1 = new ViewModel;
+        $model2 = new ViewModel;
+
+        $this->view->addRenderingStrategy(function ($e) use ($renderer) {
+            return $renderer;
+        });
+
+        $this->view->getEventManager(ViewEvent::EVENT_RENDERER_POST, function($e) use ($model2) {
+            $e->setModel($model2);
+        });
+
+        $renderer->expects($this->once())
+                 ->method('render')
+                 ->with($model2);
+
+        $this->view->render($model1);
     }
 }

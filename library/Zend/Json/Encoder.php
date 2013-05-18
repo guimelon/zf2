@@ -5,7 +5,6 @@
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Json
  */
 
 namespace Zend\Json;
@@ -18,9 +17,6 @@ use Zend\Json\Exception\RecursionException;
 
 /**
  * Encode PHP constructs to JSON
- *
- * @category   Zend
- * @package    Zend_Json
  */
 class Encoder
 {
@@ -446,35 +442,35 @@ class Encoder
      */
     public static function encodeUnicodeString($value)
     {
-        $strlen_var = strlen($value);
+        $strlenVar = strlen($value);
         $ascii = "";
 
         /**
          * Iterate over every character in the string,
          * escaping with a slash or encoding to UTF-8 where necessary
          */
-        for ($i = 0; $i < $strlen_var; $i++) {
-            $ord_var_c = ord($value[$i]);
+        for ($i = 0; $i < $strlenVar; $i++) {
+            $ordVarC = ord($value[$i]);
 
             switch (true) {
-                case (($ord_var_c >= 0x20) && ($ord_var_c <= 0x7F)):
+                case (($ordVarC >= 0x20) && ($ordVarC <= 0x7F)):
                     // characters U-00000000 - U-0000007F (same as ASCII)
                     $ascii .= $value[$i];
                     break;
 
-                case (($ord_var_c & 0xE0) == 0xC0):
+                case (($ordVarC & 0xE0) == 0xC0):
                     // characters U-00000080 - U-000007FF, mask 110XXXXX
                     // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                    $char = pack('C*', $ord_var_c, ord($value[$i + 1]));
+                    $char = pack('C*', $ordVarC, ord($value[$i + 1]));
                     $i += 1;
                     $utf16 = self::_utf82utf16($char);
                     $ascii .= sprintf('\u%04s', bin2hex($utf16));
                     break;
 
-                case (($ord_var_c & 0xF0) == 0xE0):
+                case (($ordVarC & 0xF0) == 0xE0):
                     // characters U-00000800 - U-0000FFFF, mask 1110XXXX
                     // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                    $char = pack('C*', $ord_var_c,
+                    $char = pack('C*', $ordVarC,
                                  ord($value[$i + 1]),
                                  ord($value[$i + 2]));
                     $i += 2;
@@ -482,10 +478,10 @@ class Encoder
                     $ascii .= sprintf('\u%04s', bin2hex($utf16));
                     break;
 
-                case (($ord_var_c & 0xF8) == 0xF0):
+                case (($ordVarC & 0xF8) == 0xF0):
                     // characters U-00010000 - U-001FFFFF, mask 11110XXX
                     // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                    $char = pack('C*', $ord_var_c,
+                    $char = pack('C*', $ordVarC,
                                  ord($value[$i + 1]),
                                  ord($value[$i + 2]),
                                  ord($value[$i + 3]));
@@ -494,10 +490,10 @@ class Encoder
                     $ascii .= sprintf('\u%04s', bin2hex($utf16));
                     break;
 
-                case (($ord_var_c & 0xFC) == 0xF8):
+                case (($ordVarC & 0xFC) == 0xF8):
                     // characters U-00200000 - U-03FFFFFF, mask 111110XX
                     // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                    $char = pack('C*', $ord_var_c,
+                    $char = pack('C*', $ordVarC,
                                  ord($value[$i + 1]),
                                  ord($value[$i + 2]),
                                  ord($value[$i + 3]),
@@ -507,10 +503,10 @@ class Encoder
                     $ascii .= sprintf('\u%04s', bin2hex($utf16));
                     break;
 
-                case (($ord_var_c & 0xFE) == 0xFC):
+                case (($ordVarC & 0xFE) == 0xFC):
                     // characters U-04000000 - U-7FFFFFFF, mask 1111110X
                     // see http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                    $char = pack('C*', $ord_var_c,
+                    $char = pack('C*', $ordVarC,
                                  ord($value[$i + 1]),
                                  ord($value[$i + 2]),
                                  ord($value[$i + 3]),

@@ -5,7 +5,6 @@
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Filter
  */
 
 namespace Zend\Filter;
@@ -13,10 +12,6 @@ namespace Zend\Filter;
 use Countable;
 use Zend\Stdlib\PriorityQueue;
 
-/**
- * @category   Zend
- * @package    Zend_Filter
- */
 class FilterChain extends AbstractFilter implements Countable
 {
     /**
@@ -189,8 +184,8 @@ class FilterChain extends AbstractFilter implements Countable
      */
     public function merge(FilterChain $filterChain)
     {
-        foreach ($filterChain->filters as $filter) {
-            $this->attach($filter);
+        foreach ($filterChain->filters->toArray(PriorityQueue::EXTR_BOTH) as $item) {
+            $this->attach($item['data'], $item['priority']);
         }
 
         return $this;

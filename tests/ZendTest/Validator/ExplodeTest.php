@@ -33,18 +33,21 @@ class ExplodeTest extends \PHPUnit_Framework_TestCase
             //    value              delim break  N  valid  messages                   expects
             array('foo,bar,dev,null', ',', false, 4, true,  array(),                   true),
             array('foo,bar,dev,null', ',', true,  1, false, array('X'),                false),
-            array('foo,bar,dev,null', ',', false, 4, false, array('X', 'X', 'X', 'X'), false),
+            array('foo,bar,dev,null', ',', false, 4, false, array('X'),                false),
             array('foo,bar,dev,null', ';', false, 1, true,  array(),                   true),
             array('foo;bar,dev;null', ',', false, 2, true,  array(),                   true),
-            array('foo;bar,dev;null', ',', false, 2, false, array('X', 'X'),           false),
+            array('foo;bar,dev;null', ',', false, 2, false, array('X'),                false),
             array('foo;bar;dev;null', ';', false, 4, true,  array(),                   true),
             array('foo',              ',', false, 1, true,  array(),                   true),
             array('foo',              ',', false, 1, false, array('X'),                false),
             array('foo',              ',', true,  1, false, array('X'),                false),
             array(array('a', 'b'),   null, false, 2, true,  array(),                   true),
-            array(array('a', 'b'),   null, false, 2, false, array('X', 'X'),           false),
+            array(array('a', 'b'),   null, false, 2, false, array('X'),                false),
             array('foo',             null, false, 1, true,  array(),                   true),
-            array(1,                  ',', false, 0, true,  array(Explode::INVALID => 'Invalid'), false),
+            array(1,                  ',', false, 1, true,  array(),                   true),
+            array(null,               ',', false, 1, true,  array(),                   true),
+            array(new \stdClass(),    ',', false, 1, true,  array(),                   true),
+            array(new \ArrayObject(array('a', 'b')), null, false, 2, true,  array(),   true),
         );
     }
 
@@ -62,7 +65,6 @@ class ExplodeTest extends \PHPUnit_Framework_TestCase
             'valueDelimiter'      => $delimiter,
             'breakOnFirstFailure' => $breakOnFirst,
         ));
-        $validator->setMessage('Invalid', Explode::INVALID);
 
         $this->assertEquals($expects,  $validator->isValid($value));
         $this->assertEquals($messages, $validator->getMessages());
@@ -86,5 +88,49 @@ class ExplodeTest extends \PHPUnit_Framework_TestCase
         $validator = new Explode(array());
         $this->assertAttributeEquals($validator->getOption('messageVariables'),
                                      'messageVariables', $validator);
+    }
+
+    public function testSetValidatorAsArray()
+    {
+        $validator = new Explode();
+        $validator->setValidator(
+            array(
+                'name' => 'inarray',
+                'options' => array(
+                    'haystack' => array(
+                        'a', 'b', 'c'
+                    )
+                )
+            )
+        );
+
+        /** @var $inArrayValidator \Zend\Validator\InArray */
+        $inArrayValidator = $validator->getValidator();
+        $this->assertInstanceOf('Zend\Validator\InArray', $inArrayValidator);
+        $this->assertSame(
+            array('a', 'b', 'c'), $inArrayValidator->getHaystack()
+        );
+    }
+
+    /**
+     * @expectedException \Zend\Validator\Exception\RuntimeException
+     */
+    public function testSetValidatorMissingName()
+    {
+        $validator = new Explode();
+        $validator->setValidator(
+            array(
+                'options' => array()
+            )
+        );
+    }
+
+    /**
+     * @expectedException \Zend\Validator\Exception\RuntimeException
+     */
+    public function testSetValidatorInvalidParam()
+    {
+        $validator = new Explode();
+        $validator->setValidator('inarray');
     }
 }

@@ -5,16 +5,12 @@
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Barcode
  */
 
 namespace Zend\Barcode\Object;
 
 /**
  * Class for generate Interleaved 2 of 5 barcode
- *
- * @category   Zend
- * @package    Zend_Barcode
  */
 class Code25interleaved extends Code25
 {
@@ -55,7 +51,7 @@ class Code25interleaved extends Code25
 
     /**
      * Width of the barcode (in pixels)
-     * @return integer
+     * @return int
      */
     protected function calculateBarcodeWidth()
     {
@@ -102,14 +98,14 @@ class Code25interleaved extends Code25
                 $barWidth = (substr($this->codingMap[$char2], $ibar, 1))
                           ? $this->barThickWidth
                           : $this->barThinWidth;
-                $barcodeTable[] = array(0, $barWidth, 0 , 1);
+                $barcodeTable[] = array(0, $barWidth, 0, 1);
             }
         }
 
         // Stop character (100)
-        $barcodeTable[] = array(1 , $this->barThickWidth, 0, 1);
-        $barcodeTable[] = array(0 , $this->barThinWidth,  0, 1);
-        $barcodeTable[] = array(1 , $this->barThinWidth,  0, 1);
+        $barcodeTable[] = array(1, $this->barThickWidth, 0, 1);
+        $barcodeTable[] = array(0, $this->barThinWidth, 0, 1);
+        $barcodeTable[] = array(1, $this->barThinWidth, 0, 1);
         return $barcodeTable;
     }
 

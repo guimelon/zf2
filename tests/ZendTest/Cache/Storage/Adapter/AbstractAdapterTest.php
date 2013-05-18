@@ -25,7 +25,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Mock of the abstract storage adapter
      *
-     * @var Zend\Cache\Storage\Adapter\AbstractAdapter
+     * @var \Zend\Cache\Storage\Adapter\AbstractAdapter
      */
     protected $_storage;
 
@@ -131,8 +131,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
         // test registered callback handles
         $handles = $plugin->getHandles();
-        $this->assertEquals(1, count($handles));
-        $this->assertEquals(count($plugin->getEventCallbacks()), count(current($handles)));
+        $this->assertCount(2, $handles);
 
         // test unregister a plugin
         $this->assertSame($this->_storage, $this->_storage->removePlugin($plugin));
@@ -332,20 +331,16 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storage = $this->getMockForAbstractAdapter(array('internalHasItem'));
 
-        $items  = array('key1' => true, 'key2' => false);
-        $result = array('key1');
+        $items  = array('key1' => true);
 
-        $i = 0; // method call counter
-        foreach ($items as $k => $v) {
-            $this->_storage
-                ->expects($this->at($i++))
-                ->method('internalHasItem')
-                ->with($this->equalTo($k))
-                ->will($this->returnValue($v));
-        }
+        $this->_storage
+            ->expects($this->atLeastOnce())
+            ->method('internalHasItem')
+            ->with($this->equalTo('key1'))
+            ->will($this->returnValue(true));
 
         $rs = $this->_storage->hasItems(array_keys($items));
-        $this->assertEquals($result, $rs);
+        $this->assertEquals(array('key1'), $rs);
     }
 
     public function testGetMetadataCallsInternalGetMetadata()
