@@ -5,7 +5,6 @@
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Feed
  */
 
 namespace Zend\Feed\Writer;
@@ -15,8 +14,6 @@ use Iterator;
 use Zend\Feed\Writer\Renderer;
 
 /**
-* @category Zend
-* @package Zend_Feed_Writer
 */
 class Feed extends AbstractFeed implements Iterator, Countable
 {
@@ -151,7 +148,7 @@ class Feed extends AbstractFeed implements Iterator, Countable
             }
             $entries[$timestamp] = $entry;
         }
-        krsort($entries, \SORT_NUMERIC);
+        krsort($entries, SORT_NUMERIC);
         $this->entries = array_values($entries);
 
         return $this;
@@ -241,5 +238,4 @@ class Feed extends AbstractFeed implements Iterator, Countable
         }
         return $renderer->render()->saveXml();
     }
-
 }

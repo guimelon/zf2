@@ -5,22 +5,17 @@
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Barcode
  */
 
 namespace Zend\Barcode;
 
 use Traversable;
-use Zend;
 use Zend\Stdlib\ArrayUtils;
 
 /**
  * Class for generate Barcode
- *
- * @category   Zend
- * @package    Zend_Barcode
  */
-class Barcode
+abstract class Barcode
 {
     /**
      * Default barcode TTF font name
@@ -133,7 +128,7 @@ class Barcode
             $renderer = static::makeRenderer($renderer, $rendererConfig);
         } catch (Exception\ExceptionInterface $e) {
             if ($automaticRenderError && !($e instanceof Exception\RendererCreationException)) {
-                $barcode  = static::makeBarcode('error', array( 'text' => $e->getMessage() ));
+                $barcode  = static::makeBarcode('error', array('text' => $e->getMessage()));
                 $renderer = static::makeRenderer($renderer, array());
             } else {
                 throw $e;

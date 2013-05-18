@@ -5,7 +5,6 @@
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Filter
  */
 
 namespace Zend\Filter;
@@ -13,16 +12,12 @@ namespace Zend\Filter;
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
 
-/**
- * @category   Zend
- * @package    Zend_Filter
- */
 class HtmlEntities extends AbstractFilter
 {
     /**
      * Corresponds to the second htmlentities() argument
      *
-     * @var integer
+     * @var int
      */
     protected $quoteStyle;
 
@@ -83,7 +78,7 @@ class HtmlEntities extends AbstractFilter
     /**
      * Returns the quoteStyle option
      *
-     * @return integer
+     * @return int
      */
     public function getQuoteStyle()
     {
@@ -93,7 +88,7 @@ class HtmlEntities extends AbstractFilter
     /**
      * Sets the quoteStyle option
      *
-     * @param  integer $quoteStyle
+     * @param  int $quoteStyle
      * @return HtmlEntities Provides a fluent interface
      */
     public function setQuoteStyle($quoteStyle)

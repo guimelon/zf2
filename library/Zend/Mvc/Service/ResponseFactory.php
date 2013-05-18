@@ -5,22 +5,16 @@
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Mvc
  */
 
 namespace Zend\Mvc\Service;
 
-use Zend\Http\PhpEnvironment\Response as HttpResponse;
-use Zend\Console\Response as ConsoleResponse;
 use Zend\Console\Console;
+use Zend\Console\Response as ConsoleResponse;
+use Zend\Http\PhpEnvironment\Response as HttpResponse;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-/**
- * @category   Zend
- * @package    Zend_Mvc
- * @subpackage Service
- */
 class ResponseFactory implements FactoryInterface
 {
     /**

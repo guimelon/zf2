@@ -5,7 +5,6 @@
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
  * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Ldap
  */
 
 namespace Zend\Ldap\Node;
@@ -15,10 +14,6 @@ use Zend\Ldap\Exception;
 
 /**
  * This class provides a base implementation for LDAP nodes
- *
- * @category   Zend
- * @package    Zend_Ldap
- * @subpackage Node
  */
 abstract class AbstractNode implements \ArrayAccess, \Countable
 {
@@ -309,7 +304,7 @@ abstract class AbstractNode implements \ArrayAccess, \Countable
      * This is an offline method.
      *
      * @param  string  $name
-     * @param  integer $index
+     * @param  int $index
      * @return mixed
      * @throws \Zend\Ldap\Exception\LdapException
      */
@@ -328,8 +323,8 @@ abstract class AbstractNode implements \ArrayAccess, \Countable
      * This is an offline method.
      *
      * @param  string  $name
-     * @param  integer $index
-     * @return array|integer
+     * @param  int $index
+     * @return array|int
      * @throws \Zend\Ldap\Exception\LdapException
      */
     public function getDateTimeAttribute($name, $index = null)
